@@ -1,22 +1,35 @@
+import 'dart:math';
+
+import 'package:animationdemo/global/theme/app_themes.dart';
+import 'package:animationdemo/global/theme/theme_changer.dart';
 import 'package:animationdemo/ui/page_one.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
-
-enum BannerViewMode { DarkMode, LightMode }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ThemeChanger>(
+        create: (_) => ThemeChanger(appThemeData['Green Light']),
+        child: MaterialAppWithTheme());
+  }
+}
+
+class MaterialAppWithTheme extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTheme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.from(colorScheme: const ColorScheme.light()).copyWith(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.android: ZoomPageTransitionsBuilder(),
-          },
-        ),
-      ),
+      theme: appTheme.getThemeData().copyWith(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.android: ZoomPageTransitionsBuilder(),
+              },
+            ),
+          ),
       home: MyHomePage(title: "Demo"),
     );
   }
@@ -35,63 +48,47 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isDarkMode = false;
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-          colorScheme: isDarkMode ? ColorScheme.dark() : ColorScheme.light()
+    final appTheme = Provider.of<ThemeChanger>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              final randomIndex = Random().nextInt(3);
+              appTheme.setThemeData(AppTheme.values[randomIndex]);
+            },
+          )
+        ],
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          actions: <Widget>[
-            PopupMenuButton<BannerViewMode>(
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<BannerViewMode>>[
-                PopupMenuItem<BannerViewMode>(
-                  value: BannerViewMode.DarkMode,
-                  child: ListTile(
-                    title: Text("Dark mode"),
-                    trailing: Switch(
-                      onChanged: (isDarkMode){
-                        setState(() {
-                          this.isDarkMode = isDarkMode;
-                        });
-                      },
-                      value: isDarkMode,
-                    ),
+      body: ListView(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => PageOne()));
+            },
+            child: Card(
+              child: ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  padding: EdgeInsets.all(5),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
+                  child: Image.asset(
+                    'assets/images/placeholder.png',
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-        body: ListView(
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => PageOne()));
-              },
-              child: Card(
-                child: ListTile(
-                  leading: Container(
-                    width: 40,
-                    height: 40,
-                    padding: EdgeInsets.all(5),
-                    decoration:
-                        BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                    child: Image.asset(
-                      'assets/images/placeholder.png',
-                    ),
-                  ),
-                  title: Text(
-                    "Demo 1",
-                    style: Theme.of(context).textTheme.title,
-                  ),
+                ),
+                title: Text(
+                  "Demo 1",
+                  style: Theme.of(context).textTheme.title,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
