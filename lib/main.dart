@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:animationdemo/global/theme/app_themes.dart';
 import 'package:animationdemo/global/theme/theme_changer.dart';
+import 'package:animationdemo/ui/page_four.dart';
 import 'package:animationdemo/ui/page_one.dart';
+import 'package:animationdemo/ui/page_three.dart';
+import 'package:animationdemo/ui/page_two.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,31 +67,47 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView(
         children: <Widget>[
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => PageOne()));
-            },
-            child: Card(
-              child: ListTile(
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  padding: EdgeInsets.all(5),
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: Image.asset(
-                    'assets/images/placeholder.png',
-                  ),
-                ),
-                title: Text(
-                  "Demo 1",
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
+          _buildItem("Demo Theme Color", () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PageOne()));
+          }),
+          _buildItem("Demo Curve Animation", () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PageTwo()));
+          }),
+          _buildItem("Demo Sun Circle", () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PageThree()));
+          }),
+          _buildItem("Demo UI 1", () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PageFour()));
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem(String title, GestureTapCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        child: ListTile(
+          leading: Container(
+            width: 40,
+            height: 40,
+            padding: EdgeInsets.all(5),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
+            child: Image.asset(
+              'assets/images/placeholder.png',
             ),
           ),
-        ],
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.title,
+          ),
+        ),
       ),
     );
   }
