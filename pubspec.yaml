@@ -50,6 +50,8 @@ flutter:
     - assets/images/demo.png
     - assets/images/image_1.png
     - assets/images/image_2.png
+    - assets/images/five/profile_cover.png
+    - assets/images/five/profile_avatar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

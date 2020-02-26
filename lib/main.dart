@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animationdemo/global/theme/app_themes.dart';
 import 'package:animationdemo/global/theme/theme_changer.dart';
+import 'package:animationdemo/ui/page_five.dart';
 import 'package:animationdemo/ui/page_four.dart';
 import 'package:animationdemo/ui/page_one.dart';
 import 'package:animationdemo/ui/page_three.dart';
@@ -82,6 +83,10 @@ class _MyHomePageState extends State<MyHomePage> {
           _buildItem("Demo UI 1", () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => PageFour()));
+          }),
+          _buildItem("Demo Social UI", () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PageFive()));
           }),
         ],
       ),
