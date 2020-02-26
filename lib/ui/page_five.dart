@@ -13,16 +13,119 @@ double radiusButton = 20;
 double elevationDefault = 10;
 double marginDefault = 10;
 double paddingDefault = 10;
+double maxPrice = 150;
+double maxDistance = 10;
 
 class _PageFiveState extends State<PageFive> {
+  RangeValues priceRange = RangeValues(0.2, 0.6);
+  double distanceValue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[_buildProfileCard()],
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[_buildProfileCard(), _buildFilterCard()],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterCard() {
+    return Container(
+      width: 300,
+      child: Card(
+        elevation: elevationDefault,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radiusDefault))),
+        child: Container(
+          padding: EdgeInsets.all(paddingDefault),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Filters",
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  Icon(FontAwesomeIcons.timesCircle),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Price",
+                    style: Theme.of(context).textTheme.body2,
+                  ),
+                  Text(
+                    "\$${(priceRange.start * maxPrice).round()}-\$${(priceRange.end * maxPrice).round()}",
+                    style: Theme.of(context).textTheme.body1.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onBackground
+                            .withAlpha(90)),
+                  ),
+                ],
+              ),
+              RangeSlider(
+                values: priceRange,
+                onChanged: (rangeChange) {
+                  setState(() {
+                    this.priceRange = rangeChange;
+                  });
+                },
+                onChangeEnd: (RangeValues endValues) {
+                  print('Ended change at $endValues');
+                },
+                onChangeStart: (RangeValues startValues) {
+                  print('Start change at $startValues');
+                },
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Distance",
+                    style: Theme.of(context).textTheme.body2,
+                  ),
+                  Text(
+                    "${(distanceValue*maxDistance).toStringAsFixed(1)}km",
+                    style: Theme.of(context).textTheme.body1.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onBackground
+                            .withAlpha(90)),
+                  ),
+                ],
+              ),
+              Slider(
+                value: distanceValue,
+                onChanged: (value) {
+                  setState(() {
+                    distanceValue = value;
+                  });
+                },
+                onChangeStart: (startValue) {
+                  print('Start change at $startValue');
+                },
+                onChangeEnd: (endValue) {
+                  print('Ended change at $endValue');
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -109,8 +212,27 @@ class _PageFiveState extends State<PageFive> {
                   alignment: Alignment(0, -1),
                   child: Column(
                     children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).colorScheme.background,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Theme.of(context).colorScheme.background,
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
-                        height: 70,
+                        height: 30,
                       ),
                       Container(
                           width: 80,
